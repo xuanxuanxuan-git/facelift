@@ -1,0 +1,19 @@
+Common:
+  predictor: model
+  num_of_paths: 10
+  distance_threshold: 1
+  prediction_threshold: 0.6
+  mode: ['kde', 'knn', 'epsilon']
+
+kde: 
+  mode: 'kde'
+  density_threshold: None
+
+knn:
+  mode: 'knn'
+  n_neighbours: 50
+  radius_limit: 1.10
+
+epsilon:
+  mode: 'epsilon'
+  epsilon: None
