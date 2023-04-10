@@ -17,10 +17,12 @@ class Custom_MLP(MLModel):
         self._feature_input_order = self.data.continuous
 
         params = {
-            "hidden_layer_sizes": (10,),
-            "solver": "lbfgs",
-            "alpha": 1e-3,
-            "random_state": 41
+            "hidden_layer_sizes": (30, 10, ),
+            "solver": "adam",
+            "activation": "relu",
+            "alpha": 1e-4,
+            # "random_state": 41,
+            "max_iter": 1000,
         }
 
         self._mymodel = MLPClassifier(**params)

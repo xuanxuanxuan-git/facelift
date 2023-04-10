@@ -6,11 +6,11 @@ from carla.data.catalog import OnlineCatalog, CsvCatalog
 # from carla import MLModelCatalog
 from carla.models.custom_model import Custom_MLP
 from carla.recourse_methods import Face
+from carla.recourse_methods.catalog.face.library.plotting import *
 from carla.models.negative_instances import predict_negative_instances
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-
+np.random.seed(123)
 # positive class has label 1 (which should be red in Rafael's code)
 def create_synthetic_dataset():
     # create synthetic dataset 
@@ -35,9 +35,6 @@ def create_synthetic_dataset():
     X = np.concatenate((x1, x2, x3), axis=0)
     y = np.concatenate((y1, y2, y3))
 
-    # fig, ax = plt.subplots()
-    # ax.scatter(X[:,0], X[:,1], c=y)
-    # plt.show()
     df = pd.DataFrame(X, columns = ['x1', 'x2'])
     df['y'] = y
   
@@ -52,30 +49,29 @@ def load_dataset(df):
     return dataset
 
 def find_instance(X):
-    target_df = X.loc[(X['x1']<=0.2) & (X['x2']>=0.8) & (X['x2']<0.9)]
+    target_df = X.loc[(X['x1']>=0.453) & (X['x1']<=0.55) & (X['x2']>=0.8) & (X['x2']<0.85)]
     return target_df.index
 
 
 if __name__ == '__main__':
 
-    df = create_synthetic_dataset()
-    dataset = load_dataset(df)
+    df = create_synthetic_dataset() # load original dataset as a DataFrame
+
+    dataset = load_dataset(df)  # standardisation
     model = Custom_MLP(dataset)
 
     # data_name = "adult"
     # dataset = OnlineCatalog(data_name)
     # model = MLModelCatalog(dataset, "ann", "pytorch") 
 
-    factuals = predict_negative_instances(model, dataset.df)
+    # factuals = predict_negative_instances(model, dataset.df)
     
-    target_factual_idx = find_instance(factuals)[0]
-    target_factual = factuals.loc[[target_factual_idx]]
-    print(target_factual)
+    target_factual_idx = find_instance(dataset.df)[0]
+    target_factual = dataset.df.loc[[target_factual_idx]]
+    print("target_point_index: {}".format(target_factual))
 
     hyperparams_face = {"mode": "epsilon", "fraction": 0.1}
-    
     cf_explainer = Face(model, hyperparams_face)
 
     counterfactuals = cf_explainer.get_counterfactuals(target_factual)
-
     print(counterfactuals)

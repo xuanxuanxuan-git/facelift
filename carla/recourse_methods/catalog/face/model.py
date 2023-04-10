@@ -6,6 +6,7 @@ from carla.models.api import MLModel
 from carla.recourse_methods.api import RecourseMethod
 # from carla.recourse_methods.catalog.face.library import graph_search
 from carla.recourse_methods.catalog.face.library.face_helpers import *
+from carla.recourse_methods.catalog.face.library.plotting import *
 from carla.recourse_methods.processing import (
     check_counterfactuals,
     # encode_feature_names,
@@ -62,14 +63,13 @@ class Face(RecourseMethod):
     _DEFAULT_WEIGHT_FUNCTION = lambda x: -np.log(x)
     _DEFAULT_PREDICTION_THRESHOLD = 0.6
     _DEFAULT_DENSITY_THRESHOLD = 1e-5
-    _DEFAULT_DISTANCE_THRESHOLD = 0.1
+    _DEFAULT_DISTANCE_THRESHOLD = 1.1
     _DEFAULT_RADIUS_LIMIT = 1.10
-    _DEFAULT_N_NEIGHBOURS = 20
+    _DEFAULT_N_NEIGHBOURS = 5   #10
     _DEFAULT_DISTANCE_FUNCTION = "l2"
 
     _DEFAULT_HYPERPARAMS = {"method": _DEFAULT_METHOD, 
                             "num_of_paths": _DEFAULT_NUM_OF_PATHS,
-                            "distance_threshold": _DEFAULT_DISTANCE_THRESHOLD,
                             "prediction_threshold": _DEFAULT_PREDICTION_THRESHOLD,
                             "weight_function": _DEFAULT_WEIGHT_FUNCTION,
                             "density_threshold": _DEFAULT_DENSITY_THRESHOLD,
@@ -92,10 +92,8 @@ class Face(RecourseMethod):
         self.prediction_threshold = checked_hyperparams["prediction_threshold"]
         self.weight_function = checked_hyperparams["weight_function"]
         self.density_threshold = checked_hyperparams["density_threshold"]
-        self.distance_threshold = checked_hyperparams["distance_threshold"]
         self.radius_limit = checked_hyperparams["radius_limit"]
         self.n_neighbours = checked_hyperparams["n_neighbours"]
-        self.distance_function = checked_hyperparams["distance_function"]
         self.distance_function = checked_hyperparams["distance_function"]
 
         # self._immutables = encode_feature_names(
@@ -231,59 +229,56 @@ class Face(RecourseMethod):
             raise ValueError("Distance function is not supported. Available distance functions are \"l1\" and \"l2\".")
     
     
-
-
-
-
     def get_counterfactuals(self, factuals: pd.DataFrame) -> pd.DataFrame:
-        # >drop< factuals from dataset to prevent duplicates,
-        # >reorder< and >add< factuals to top; necessary in order to use the index
-                
+       
         df = self._mlmodel.data.df.copy()
         self.X = df.iloc[:, :-1]
         self.y = df.iloc[:, -1]
+
         self.n_samples, self.n_features = self.X.shape
-
-        # weight_matrix_e = get_weights_epsilon(self.n_samples, self.X, 
-        #                                 self.epsilon, self.distance_function, self.weight_function)
-        # print(weight_matrix_e.shape)
-
-        # weight_matrix_knn = get_weights_knn(self.n_samples, self.X, 
-        #                                     self.distance_threshold, self.n_neighbours, 
-        #                                     self.distance_function, self.weight_function)
-        # print(weight_matrix_knn.shape)
-
-        density_scorer = get_kernel_density_estimator(self.X).score_samples
-        weight_matrix_kde = get_weights_kde(self.n_samples, self.X, 
-                                            self.distance_threshold, 
-                                            self.distance_function, 
-                                            self.weight_function, density_scorer)
         
-        graph = construct_graph(weight_matrix_kde)
-        start_point_value = self.X.iloc[14]
-        target_class = 1
+        self.method = 'knn'
+        self.distance_threshold = 0.6
+        self.n_neighbours = 6          # only used in "knn" method. 
+        self.prediction_threshold = 0.6 # only used after constructing the graph
+        self.density_threshold = 1e-5   # only used in "kde" after constructing the graph
+        
         params = {
-            "method": "kde",
-            "prediction_threshold": 0.9,
-            "density_threshold": 0.7,
+            "X": self.X,
+            "method": self.method,
+            "n_samples": self.n_samples,
+            "distance_threshold": self.distance_threshold,
+            "distance_function": self.distance_function,
+            "weight_function": self.weight_function,
+            "n_neighbours": self.n_neighbours   # used only in "knn" method
         }
+    
+        # Construct the graph    
+        weight_matrix = get_weight_matrix(params)
+
+        graph = construct_graph(weight_matrix)
+
+        # define more hyper-parameters    
+        start_point_value = self.X.iloc[20]
+        target_class = 1
+        params["prediction_threshold"] = self.prediction_threshold
+        if params["method"] == "kde":
+            params["density_threshold"] = self.density_threshold
         
-        find_counterfactuals(start_point_value, self.X, self.y, graph, 
-                             target_class, self._mlmodel, density_scorer, 
-                             params)
+        density_scorer = get_kernel_density_estimator(self.X).score_samples
+        
+        node_path, sorted_cf_indices = find_counterfactuals(start_point_value, self.X, 
+                                         self.y, graph, target_class, 
+                                         self._mlmodel, density_scorer, params)
 
-
-
-
-
-
-
+        plot_counterfactual_explanations(df, self.X, self._mlmodel, 1, node_path, sorted_cf_indices)
 
         exit()
 
 
 
-
+        # >drop< factuals from dataset to prevent duplicates,
+        # >reorder< and >add< factuals to top; necessary in order to use the index
         cond = df.isin(factuals).values
         df = df.drop(df[cond].index)
         df = pd.concat([factuals, df], ignore_index=True)

@@ -35,7 +35,7 @@ def get_weights_epsilon(n_samples, X, distance_threshold,
         # get features of the ith data instance
         x_i = X.iloc[i].values.reshape(-1, 1)
 
-        for j in range(i):
+        for j in range(n_samples):
             x_j = X.iloc[j].values.reshape(-1, 1)
 
             # In Line 2, Algorithm 1, there are 2 conditions to check
@@ -48,11 +48,12 @@ def get_weights_epsilon(n_samples, X, distance_threshold,
 
             ## Condition 1: check distance
             dist = distance_function(x_i, x_j)
-            if dist <= distance_threshold:
+            if dist <= distance_threshold and dist != 0:
                 W[i, j] = weight_function(dist)
-                W[j, i] = W[i, j]
+                # W[j, i] = W[i, j]
             
     return W
+
 
 def get_weights_knn(n_samples, X, distance_threshold, n_neighbours, 
                     distance_function, weight_function):
@@ -94,7 +95,7 @@ def get_weights_knn(n_samples, X, distance_threshold, n_neighbours,
         reset_neighbours_idx = np.argsort(W[i, :])[n_reset_neighbours:]
         mask = np.ix_(reset_neighbours_idx)
         W[i, mask] = 0
-    
+
     # Step 2: assign weight to the edge based on the distance between two vertices.
     for i in range(n_samples):
         x_i = X.iloc[i].values.reshape(-1, 1)
@@ -168,7 +169,7 @@ def get_kernel_density_estimator(X):
     kd_estimators.fit(X)
     return kd_estimators.best_estimator_
 
-def get_weight_matrix(**params):
+def get_weight_matrix(params):
     """Return the correct weight matrix.
 
     Returns:
@@ -176,19 +177,25 @@ def get_weight_matrix(**params):
     """
     weight_matrix = 0
     if params["method"] == "kde":
-        density_scorer = get_kernel_density_estimator(params["X"].score_samples)
-        weight_matrix = get_weights_kde(params["n_samples"], params["X"], params["distance_threshold"],
-                                        params["distance_function"], params["weight_function"],
+        density_scorer = get_kernel_density_estimator(params["X"]).score_samples
+        weight_matrix = get_weights_kde(params["n_samples"], params["X"], 
+                                        params["distance_threshold"],
+                                        params["distance_function"], 
+                                        params["weight_function"],
                                         density_scorer)
     elif params["method"] == "epsilon":
         weight_matrix = get_weights_epsilon(params["n_samples"], params["X"], 
                                             params["distance_threshold"], 
-                                            params["distance_function"], params["weight_function"])
+                                            params["distance_function"], 
+                                            params["weight_function"])
 
     elif params["method"] == "knn":
         weight_matrix = get_weights_knn(params["n_samples"], params["X"], 
-                                        params["distance_threshold"], params["n_neighbours"], 
-                                        params["distance_function"], params["weight_function"])
+                                        params["distance_threshold"], 
+                                        params["n_neighbours"], 
+                                        params["distance_function"], 
+                                        params["weight_function"])
+
     return weight_matrix
 
 def construct_graph(weight_matrix):
@@ -216,7 +223,8 @@ def find_shortest_path(graph, start_point_idx):
     )
 
     # Need to avoid the shortest distance node to be the start point itself
-    dist_matrix[start_point_idx] = np.inf
+    # dist_matrix[start_point_idx] = np.inf
+
     return dist_matrix, predecessors
 
 def reconstruct_shortest_path(predecessors, start_point_idx, end_point_idx):
@@ -231,8 +239,10 @@ def reconstruct_shortest_path(predecessors, start_point_idx, end_point_idx):
         node_path (list): [start_point_idx, intermedium points index, end_point_idx]
     """
 
-    node_path = [end_point_idx]
-    print(predecessors[end_point_idx])
+    if predecessors[end_point_idx] == start_point_idx:
+        node_path = [end_point_idx]
+    else:
+        node_path = []
     intermedium_idx = end_point_idx
     while (predecessors[intermedium_idx] != start_point_idx):
         node_path.append(intermedium_idx)
@@ -252,7 +262,7 @@ def find_counterfactuals(start_point_value, X, y, graph,
                           target_class, predictor, density_scorer, params):
 
     start_point_idx = np.where((X == start_point_value).all(axis=1))[0][0]
-    
+    print(start_point_value)
     # positive predictions -> find indices of points in target class that predictor gives required confidence.
     y_proba = predictor.predict_proba(X)
     y_high_proba = np.where(y_proba >= params["prediction_threshold"])[0]
@@ -264,24 +274,31 @@ def find_counterfactuals(start_point_value, X, y, graph,
         y_high_density = np.where(density >= params["density_threshold"])[0]
         y_candidate_indices = list(set(y_high_proba).intersection(set(y_target_indices)).intersection(set(y_high_density)))
     else:
-        y_candidate_indices = list(set(y_high_proba).intersection(set(y_high_density)))
+        y_candidate_indices = list(set(y_high_proba).intersection(set(y_target_indices)))
 
     dist, predecessors = find_shortest_path(graph, start_point_idx)
     
     # change the distance matrix and only keep the distance to y_candidate_indices
-    y_candidate_reachability = np.full(X.shape[0], np.inf)
+    y_candidate_reachability = np.full(X.shape[0], 0)
     for idx in y_candidate_indices:
-        y_candidate_reachability[idx] = 1
-
+        y_candidate_reachability[idx] = 1.0
+    
     # In the distance list, we keep only the distance to valid CF points.  
     y_candidate_dist = np.multiply(dist, y_candidate_reachability)
-
+    # print(dist)
+    # print(y_candidate_dist)
     # Sort the distance, and get the index of sorted valid CF points.
-    valid_y_dist, = np.where(y_candidate_dist < np.inf)
+    valid_y_dist, = np.where(y_candidate_dist >0)
+    # print("valid y dist: {}".format(valid_y_dist))
     sorted_y_indices = valid_y_dist[np.argsort(y_candidate_dist[valid_y_dist])]
 
-    node_path = reconstruct_shortest_path(predecessors, start_point_idx, sorted_y_indices[0])
+    if len(sorted_y_indices) == 0:
+        raise ValueError("No CF explanations available.")
+    node_path = reconstruct_shortest_path(predecessors, start_point_idx, 
+                                          sorted_y_indices[2])
+    print(dist[node_path[-1]])
     print(node_path)
+    return node_path, sorted_y_indices
 
 
 
@@ -290,6 +307,14 @@ def check_conditions(x_i, x_j):
     #             check if additional custom conditions are satisfied
     return True
 
-# TODO: plot the paths
+
 # TODO: add custom conditions
 # TODO: use a parser to take parameters, build a yaml file to store default parameters.
+
+# weight matrix: the closer -> the larger weight
+# those who cannot be reached have 0 weight.
+
+# Bug:
+# In Dijkstra method, it is assumed that edge value is cost. 
+# (The further the distance, the larger the cost)
+# However, we pass in edge weight, and the further, the smaller.

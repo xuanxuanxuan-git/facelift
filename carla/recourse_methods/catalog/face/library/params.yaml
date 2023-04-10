@@ -1,4 +1,4 @@
-Common:
+common:
   predictor: model
   num_of_paths: 10
   distance_threshold: 1
