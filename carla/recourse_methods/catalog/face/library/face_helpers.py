@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KernelDensity
 from scipy.sparse import csr_matrix, csgraph
@@ -49,7 +50,7 @@ def get_weights_epsilon(n_samples, X, distance_threshold,
             ## Condition 1: check distance
             dist = distance_function(x_i, x_j)
             if dist <= distance_threshold and dist != 0:
-                W[i, j] = weight_function(dist)
+                W[i, j] = weight_function(dist)*dist
                 # W[j, i] = W[i, j]
             
     return W
@@ -103,7 +104,7 @@ def get_weights_knn(n_samples, X, distance_threshold, n_neighbours,
             x_j = X.iloc[j].values.reshape(-1, 1)
             if W[i, j] != 0:
                 dist = W[i, j]
-                W[i, j] = weight_function(dist)
+                W[i, j] = weight_function(dist)*dist
     
     return W
 
@@ -145,6 +146,7 @@ def get_weights_kde(n_samples, X, distance_threshold,
                  density = density_scorer(mid_points.reshape(1,-1))
                  W[i, j] = weight_function(np.exp(density)) * dist
     
+    print(W[20, 218])
     return W
 
 def get_kernel_density_estimator(X):
@@ -168,6 +170,25 @@ def get_kernel_density_estimator(X):
 
     kd_estimators.fit(X)
     return kd_estimators.best_estimator_
+
+def get_epsilon_knn_weight_function(k, n_features, n_samples):
+    """Get the weight function to calculate weight of edge in knn/epsilon graph.
+
+    Args:
+        k (int): how significant you want for diminishing the distance between two points.
+        n_features (int): number of features
+        n_samples (int): number of data instances
+
+    Returns:
+        function: a weight function
+    """
+    # The volume of a d-dimensional unit sphere is pi**(d/2)/gamma(d/2+1)
+    sphere_volume = math.pi**(n_features/2)/math.gamma(n_features/2 + 1)
+    r = (k/(n_samples * sphere_volume))
+
+    weight_function = lambda x: -np.log((r/x)**n_features)
+    return weight_function
+
 
 def get_weight_matrix(params):
     """Return the correct weight matrix.
@@ -309,12 +330,13 @@ def check_conditions(x_i, x_j):
 
 
 # TODO: add custom conditions
-# TODO: use a parser to take parameters, build a yaml file to store default parameters.
+# TODO: sampling dataset to construct the graph.
+# TODO: directed graph to simulate that you cannot reverse what you have done.
 
-# weight matrix: the closer -> the larger weight
-# those who cannot be reached have 0 weight.
 
-# Bug:
-# In Dijkstra method, it is assumed that edge value is cost. 
-# (The further the distance, the larger the cost)
-# However, we pass in edge weight, and the further, the smaller.
+# Question:
+# To satisfy custom conditions, you have to prune the edge from the graph. This will not affect the kernel density, but it affects the outgoing lines of a node.
+
+# Alternative 1:
+# Use influence function as a proxy of density
+# Use the number of outgoing lines (connectedness) of a node together with the local density.

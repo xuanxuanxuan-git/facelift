@@ -1,19 +1,17 @@
-common:
-  predictor: model
-  num_of_paths: 10
-  distance_threshold: 1
-  prediction_threshold: 0.6
-  mode: ['kde', 'knn', 'epsilon']
+# Shared settings (across all three methods)
+seed: 123
+predictor: model
+num_of_paths: 5
+distance_threshold: 1.1
+prediction_threshold: 0.6
+distance_function: "l2"   # alternative: "l2"
+method: "kde"             # alternative: 'knn', 'epsilon'
 
 kde: 
-  mode: 'kde'
-  density_threshold: None
+  density_threshold: 1e-5
 
 knn:
-  mode: 'knn'
   n_neighbours: 50
   radius_limit: 1.10
 
 epsilon:
-  mode: 'epsilon'
-  epsilon: None
