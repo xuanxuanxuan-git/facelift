@@ -9,7 +9,7 @@
 <code>python run_explainers.py</code>
 
 ## Main files
-- FACE model is implement in carla/recourse_methods/catalog/face.
+- FACE model is implement in `carla/recourse_methods/catalog/face`.
 - `library/params.yaml` defines all the hyper-parameters.
 - `library/plotting.py` contains all code to for plotting (Documentation missing).
 - `library/face_helpers.py` contains all critical code.
