@@ -19,9 +19,20 @@
 ## Known bugs
 - CF paths will not go right even after I relax all constraints.
 
-<br>
-<br>
+
 ---
+
+## Official complaints about FACE (WIP)
+- Features are not normalised when calculating distance.
+- k-NN is implemented wrong: weight function is a constant rather than considering local density of the point.
+- epsilon graph: why do you $\epsilon^d$? (d is the number of features)
+
+
+<br>
+<br>
+
+---
+
 
 ## Notes for debugging, please ignore
 

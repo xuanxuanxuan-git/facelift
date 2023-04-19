@@ -334,9 +334,6 @@ def check_conditions(x_i, x_j):
 # TODO: directed graph to simulate that you cannot reverse what you have done.
 
 
-# Question:
-# To satisfy custom conditions, you have to prune the edge from the graph. This will not affect the kernel density, but it affects the outgoing lines of a node.
-
 # Alternative 1:
 # Use influence function as a proxy of density
 # Use the number of outgoing lines (connectedness) of a node together with the local density.
