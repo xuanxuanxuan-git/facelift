@@ -96,6 +96,7 @@ def get_weights_knn(n_samples, X, distance_threshold, n_neighbours,
         reset_neighbours_idx = np.argsort(W[i, :])[n_reset_neighbours:]
         mask = np.ix_(reset_neighbours_idx)
         W[i, mask] = 0
+        # caveat: W here is asymmetric.
 
     # Step 2: assign weight to the edge based on the distance between two vertices.
     for i in range(n_samples):
@@ -268,6 +269,7 @@ def reconstruct_shortest_path(predecessors, start_point_idx, end_point_idx):
     while (predecessors[intermedium_idx] != start_point_idx):
         node_path.append(intermedium_idx)
         intermedium_idx = predecessors[intermedium_idx]
+    node_path.append(intermedium_idx)
     node_path.append(start_point_idx)
     
     return node_path[::-1]
