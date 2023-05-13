@@ -134,8 +134,5 @@ dmypy.json
 *.h5
 *.pt
 
-# data files
-*.csv
-
 # test results
 *.html
