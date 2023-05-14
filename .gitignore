@@ -137,5 +137,8 @@ dmypy.json
 # dataset
 *.csv
 
+# session file
+*.db
+
 # test results
 *.html
