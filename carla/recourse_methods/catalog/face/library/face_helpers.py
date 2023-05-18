@@ -147,7 +147,7 @@ def get_weights_kde(n_samples, X, distance_threshold,
                  density = density_scorer(mid_points.reshape(1,-1))
                  W[i, j] = weight_function(np.exp(density)) * dist
     
-    print(W[20, 218])
+    # print(W[20, 218])
     return W
 
 def get_kernel_density_estimator(X):
@@ -189,7 +189,6 @@ def get_epsilon_knn_weight_function(k, n_features, n_samples):
 
     weight_function = lambda x: -np.log((r/x)**n_features)
     return weight_function
-
 
 def get_weight_matrix(params):
     """Return the correct weight matrix.
@@ -275,12 +274,6 @@ def reconstruct_shortest_path(predecessors, start_point_idx, end_point_idx):
     return node_path[::-1]
     
 
-def reconstruct_shortest_path_all_candidates(predecessors, start_point_idx, 
-                                             sorted_y_indices):
-    # return the node paths to all valid CF points.
-    # need to check that sorted_y_indices may be void.
-    pass
-
 def find_counterfactuals(start_point_value, X, y, graph,
                           target_class, predictor, density_scorer, params):
 
@@ -330,12 +323,3 @@ def check_conditions(x_i, x_j):
     #             check if additional custom conditions are satisfied
     return True
 
-
-# TODO: add custom conditions
-# TODO: sampling dataset to construct the graph.
-# TODO: directed graph to simulate that you cannot reverse what you have done.
-
-
-# Alternative 1:
-# Use influence function as a proxy of density
-# Use the number of outgoing lines (connectedness) of a node together with the local density.
