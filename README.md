@@ -1,6 +1,19 @@
-# FaceLift
+# FaceLift 
+## Spatially-aware counterfactual explainers
 
-## ["epsilon", "knn", "kde"]
+---
+## Get started
+``
+pip install -r requirements.txt
+``
+
+## Run the code
+``
+python run_explainer.py
+``
+
+
+## Three methods proposed in FACE
 - epsilon-graph: the most basic method, as long as neighbours are within epsilon-distance, they are kept in the adjacency matrix. The weight of the edge is diminished (logarithmically, by default) by the distance (default is l2-norm).
 
 - knn-graph: for all neighbours which are within the distance-threshold, only top-k nearest neighbours are kept in the adjacency matrix. Therefore, this method runs additional selection process. 
