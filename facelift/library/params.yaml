@@ -1,12 +1,12 @@
 # Shared settings (across all three methods)
 seed: 123
 predictor: model
-distance_threshold: 7
+distance_threshold: 6.1
 prediction_threshold: 0.6
 penalty_term: 1.1
-distance_function: "weighted"   # alternative: "l1", "weighted"
-method: "knn"             # alternative: "knn", "epsilon", "kde"
-directed: True
+distance_function: "l2"   # alternative: "l1", "l2", "weighted"
+method: "epsilon"             # alternative: "knn", "epsilon", "kde"
+directed: True                # alternative: False
 
 kde: 
   density_threshold: 1e-5 

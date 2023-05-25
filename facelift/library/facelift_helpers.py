@@ -145,10 +145,12 @@ def get_weights_kde(n_samples, X, distance_threshold,
             # The value of an edge is distance diminished by the density.
             dist = distance_function(x_j, x_i)
             if dist <= distance_threshold:
-                 mid_points = (x_i + x_j)/2
-                 # Density is the log-likelihood of the mid-point.
-                 density = density_scorer(mid_points.reshape(1, -1))
-                 W[i, j] = weight_function(np.exp(density)) * dist
+                mid_points = (x_i + x_j)/2
+                # Density is the log-likelihood of the mid-point.
+                density = density_scorer(mid_points.reshape(1, -1))
+                # weight function = -np.log(x), so np.exp(density) has to be smaller than 1.
+                W[i, j] = weight_function(np.exp(density)) * dist
+                 
     
     return W
 
@@ -167,7 +169,7 @@ def get_kernel_density_estimator(X):
     # bandwidth: the number of bins that divide the range of the data.
     bandwidths = np.logspace(-2, 0, 10)
     kd_estimators = GridSearchCV(
-        estimator = KernelDensity(kernel="gaussian", metric="euclidean"),
+        estimator = KernelDensity(kernel="gaussian", metric="l2"),
         param_grid = {"bandwidth": bandwidths}
     )
 

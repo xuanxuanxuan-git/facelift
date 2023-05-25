@@ -23,7 +23,8 @@ if __name__ == '__main__':
     init_seed(config["seed"])
 
     # Load the processed dataset
-    X, y = load_dataset("mnist")
+    X, y = load_dataset("heloc")
+    print(X)
 
     # Load predictor
     model = mlp_classifier(X, y).fitted_model
