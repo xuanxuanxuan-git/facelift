@@ -20,6 +20,7 @@ C1 = 1.4
 C2 = 0.2
 
 k=50
+eps=1
 A = np.array([[-1.8-C1, -3.25+1.8], # D
               [-1.8-C2, -2+1.8]])
 B = np.array([[0-C1, -1.4-0, -1.45--1.4], # F
@@ -34,7 +35,6 @@ C_hat = sim.part(C, k)
 D_hat = sim.part(D, k)
 
 w = np.ones(k) * np.linspace(1,0,k)
-eps=1
 
 print(sim.S(A_hat, B_hat, w, eps)[0])
 print(sim.S(B_hat, A_hat, w, eps)[0])
@@ -80,7 +80,9 @@ ax2.yaxis.set_tick_params(labelleft=False)
 ax2.set_xticks([])
 ax2.set_yticks([])
 ax2.axis('off')
-font_size = 15
+font_size = 25
+weight_1 = 4
+weight_2 = 3
 start1 = 0
 start2 = 0
 end1 = C1
@@ -91,7 +93,7 @@ for i in range(0, A.shape[1]):
     end1 += A[0, i]
     end2 += A[1, i]
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=2.5, color='black', alpha=.5))
+                 arrowprops=dict(arrowstyle="->", lw=weight_1, color='black', alpha=.5))
     if i == A.shape[1] - 1:
         plt.text(-3.35, -2, 'D', va='center', ha='center',
                  rotation='horizontal', fontsize=font_size, color='green', alpha=.7,
@@ -107,7 +109,7 @@ for i in range(0, A_hat.shape[1]):
     end1 = A_hat[0, i]+C1
     end2 = A_hat[1, i]+C2
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=1, color='green', alpha=.8))
+                 arrowprops=dict(arrowstyle="->", lw=weight_2, color='green', alpha=.8))
 
 start1 = 0
 start2 = 0
@@ -119,7 +121,7 @@ for i in range(0, B.shape[1]):
     end1 += B[0, i]
     end2 += B[1, i]
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=2.5, color='black', alpha=.5))
+                 arrowprops=dict(arrowstyle="->", lw=weight_1, color='black', alpha=.5))
     if i == B.shape[1] - 1:
         plt.text(-1.45, -3.7, 'F', va='center', ha='center',
                  rotation='horizontal', fontsize=font_size, color='red', alpha=.7,
@@ -136,7 +138,7 @@ for i in range(0, B_hat.shape[1]):
     end1 = B_hat[0, i] + C1
     end2 = B_hat[1, i] + C2
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=1, color='red', alpha=.8))
+                 arrowprops=dict(arrowstyle="->", lw=weight_2, color='red', alpha=.8))
 
 start1 = 0
 start2 = 0
@@ -148,7 +150,7 @@ for i in range(0, C.shape[1]):
     end1 += C[0, i]
     end2 += C[1, i]
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=2.5, color='black', alpha=.5))
+                 arrowprops=dict(arrowstyle="->", lw=weight_1, color='black', alpha=.5))
     if i == C.shape[1] - 1:
         plt.text(2.45 + 0.15, -0.25, 'A', va='center', ha='center',
                  rotation='horizontal', fontsize=font_size, color='blue', alpha=.7,
@@ -164,7 +166,7 @@ for i in range(0, C_hat.shape[1]):
     end1 = C_hat[0, i]+C1
     end2 = C_hat[1, i]+C2
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=1, color='blue', alpha=.8))
+                 arrowprops=dict(arrowstyle="->", lw=weight_2, color='blue', alpha=.8))
 
 start1 = 0
 start2 = 0
@@ -176,7 +178,7 @@ for i in range(0, D.shape[1]):
     end1 += D[0, i]
     end2 += D[1, i]
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=2.5, color='black', alpha=.5))
+                 arrowprops=dict(arrowstyle="->", lw=weight_1, color='black', alpha=.5))
     if i == D.shape[1] - 1:
         plt.text(-1.2 - 0.45, -1.75 - 0.7, r'E$_1$', va='center', ha='center',
                  rotation='horizontal', fontsize=font_size, color='yellow', alpha=.7,
@@ -192,7 +194,7 @@ for i in range(0, D_hat.shape[1]):
     end1 = D_hat[0, i]+C1
     end2 = D_hat[1, i]+C2
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
-                 arrowprops=dict(arrowstyle="->", lw=1, color='yellow', alpha=.8))
+                 arrowprops=dict(arrowstyle="->", lw=weight_2, color='yellow', alpha=.8))
 
 
 circle = plt.Circle((-2, 2), eps, color='black', linestyle='--', alpha=0.2)
