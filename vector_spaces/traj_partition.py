@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from main import surface_1
-import sim_meas as sim
+from multiverse import surface_1
+from vector_spaces.func import sim_meas as sim
 import matplotlib.patheffects as pe
 
 
@@ -201,5 +201,5 @@ plt.text(-2 + eps+0.1, 2, r'$\epsilon$', va='center', ha='center',
                  rotation='horizontal', fontsize=15, color='black', alpha=.7)
 ax2.add_patch(circle)
 ax2.plot([C1], [C2], marker="X", markersize=8, markeredgecolor="k", markerfacecolor="white", alpha=1, zorder=50)
-plt.savefig('CF_paths_kis{}_epsis{}.pdf'.format(k, eps), bbox_inches='tight')
+plt.savefig('plots/CF_paths_kis{}_epsis{}.pdf'.format(k, eps), bbox_inches='tight')
 plt.show()
