@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from multiverse import surface_1
+from func.data_gen import surface_1
 from vector_spaces.func import sim_meas as sim
 import matplotlib.patheffects as pe
 
@@ -180,7 +180,7 @@ for i in range(0, D.shape[1]):
     plt.annotate("", xy=(end1, end2), xytext=(start1, start2),
                  arrowprops=dict(arrowstyle="->", lw=weight_1, color='black', alpha=.5))
     if i == D.shape[1] - 1:
-        plt.text(-1.2 - 0.45, -1.75 - 0.7, r'E$_1$', va='center', ha='center',
+        plt.text(-1.2 - 0.45, -1.75 - 0.7, r'E$_2$', va='center', ha='center',
                  rotation='horizontal', fontsize=font_size, color='yellow', alpha=.7,
                  path_effects=[pe.withStroke(linewidth=4, foreground="black")])
 
