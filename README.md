@@ -15,9 +15,6 @@ Please consider citing our work if you find it useful. Thank you! :D
 }
 ```
 
-
-
-
 ---
 
 ## Introduction
@@ -25,7 +22,7 @@ We introduce a <i>spatially-aware counterfactual explainers</i> in our proposed 
 
 The role of geometry in (counterfactual) explainability is captured by the following figure, which demonstrates the diverse characteristics of counterfactual paths for a two-dimensional toy data set with continuous numerical features. 
 <p style="text-align:center">
-<img src="vector_spaces/plots/CF_paths_no_bound.png" width="350">
+<img src="vector_spaces/plots/CF_paths_no_bound.png" width="450">
 </p>
 When considered in isolation, these paths have the following properties: 
 
@@ -57,7 +54,7 @@ pip install -r requirements.txt
 The following figure demonstrate the counterfactual pathfinding in the MNIST dataset and the branching factors in these paths.
 
 <p style="text-align:center">
-<img src="examples/figures/mnist.png" width="350">
+<img src="examples/figures/mnist.png" width="450">
 </p>
 
 In this figure, paths 1 (blue) and 2 (green) explain an instance $\mathring{x}$ classified as $\mathring{y} = 1$ for the counterfactual class $\check{y}$ = 9. Paths leading to alternative classification outcomes are also possible (shown in grey). Path 1 is shorter than Path 2 at the expense of explainees’ agency – which is reflected in its smaller branching factor – therefore switching to alternative paths leading to different classes is easier, i.e., less costly in terms of distance.
