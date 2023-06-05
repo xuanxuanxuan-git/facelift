@@ -143,3 +143,6 @@ dmypy.json
 
 # test results
 *.html
+
+# MacOS
+.DS_Store
