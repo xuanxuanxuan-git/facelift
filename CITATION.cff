@@ -12,8 +12,8 @@ authors:
   orcid: "https://orcid.org/0000-0002-9365-8949"
 title: "Navigating Explanatory Multiverse Through Counterfactual Path Geometry"
 version: FACElift
-doi: xx.xxxx/xxxxxx.xxxxxxx
-date-released: 2023-06-05
+doi: 10.48550/arXiv.2306.02786
+date-released: 2023-06-06
 url: "https://github.com/xuanxuanxuan-git/facelift"
 preferred-citation:
   type: article
@@ -28,5 +28,5 @@ preferred-citation:
   - family-names: "Xuan"
     given-names: "Yueqing"
     orcid: "https://orcid.org/0000-0002-9365-8949"
-  journal: "arXiv preprint arXiv:xxxx.xxxxx"
+  journal: "arXiv preprint arXiv:2306.02786"
   year: 2023

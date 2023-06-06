@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/github/license/xuanxuanxuan-git/facelift)](https://github.com/xuanxuanxuan-git/facelift/blob/main/LICENSE)
-[![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-red.svg)](https://arxiv.org/abs/xxxx.xxxxx)
+[![arXiv](https://img.shields.io/badge/arXiv-2306.02786-red.svg)](https://arxiv.org/abs/2306.02786)
 
 # FACELift 
 
@@ -18,7 +18,7 @@ This repository hosts `FACElift` – source code and useful resources for the fo
 @article{
   title={Navigating Explanatory Multiverse Through Counterfactual Path Geometry},
   author={Sokol, Kacper and Small, Edward and Xuan, Yueqing},
-  journal={arXiv preprint arXiv:xxxx.xxxxx},
+  journal={arXiv preprint arXiv:2306.02786},
   year={2023}
 }
 ```
