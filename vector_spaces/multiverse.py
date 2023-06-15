@@ -45,9 +45,9 @@ if __name__ == '__main__':
     plt.text(2.45 + 0.15, -0.25, 'A', va='center', ha='center',
              rotation='horizontal', fontsize=font_size, color='white', alpha=.7,
              path_effects=[pe.withStroke(linewidth=4, foreground="black")])
-    plt.annotate("", xy=(1.8, 1.3), xytext=(C1, C2),
+    plt.annotate("", xy=(C1+0.05, 1.3), xytext=(C1, C2),
                  arrowprops=dict(arrowstyle="->", lw=1.5, color='black', alpha=.7))
-    plt.annotate("", xy=(2.45, 1.35), xytext=(1.8, 1.3),
+    plt.annotate("", xy=(2.45, 1.35), xytext=(C1+0.05, 1.3),
                  arrowprops=dict(arrowstyle="->", lw=1.5, color='black', alpha=.7))
     plt.text(2.45 + 0.15, 1.35, 'C', va='center', ha='center',
              rotation='horizontal', fontsize=font_size, color='white', alpha=.7,

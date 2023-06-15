@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you build upon our ideas, please cite the following paper."
+authors:
+- family-names: "Sokol"
+  given-names: "Kacper"
+  orcid: "https://orcid.org/0000-0002-9869-5896"
+- family-names: "Small"
+  given-names: "Edward"
+  orcid: "https://orcid.org/0000-0002-3368-1397"
+- family-names: "Xuan"
+  given-names: "Yueqing"
+  orcid: "https://orcid.org/0000-0002-9365-8949"
+title: "Navigating Explanatory Multiverse Through Counterfactual Path Geometry"
+version: FACElift
+doi: 10.48550/arXiv.2306.02786
+date-released: 2023-06-06
+url: "https://github.com/xuanxuanxuan-git/facelift"
+preferred-citation:
+  type: article
+  title: "Navigating Explanatory Multiverse Through Counterfactual Path Geometry"
+  authors:
+  - family-names: "Sokol"
+    given-names: "Kacper"
+    orcid: "https://orcid.org/0000-0002-9869-5896"
+  - family-names: "Small"
+    given-names: "Edward"
+    orcid: "https://orcid.org/0000-0002-3368-1397"
+  - family-names: "Xuan"
+    given-names: "Yueqing"
+    orcid: "https://orcid.org/0000-0002-9365-8949"
+  journal: "arXiv preprint arXiv:2306.02786"
+  year: 2023
