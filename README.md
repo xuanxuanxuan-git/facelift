@@ -66,6 +66,14 @@ The following figure demonstrates counterfactual pathfinding in the MNIST datase
 > Paths leading to alternative classification outcomes are also possible (shown in grey).
 > Path 1 is shorter than Path 2 at the expense of explainees' agency – which is reflected in its smaller branching factor – therefore switching to alternative paths leading to different classes is easier, i.e., less costly in terms of distance.
 
+## Baselines
+
+We use the following three baseline explainers to generate counterfactual explanations for MNIST dataset.
+- **FACE** is implemented in [`mnist_example.ipynb`](examples/mnist_example.ipynb).
+- **Growing Sphere** is implemented in [`growing_sphere.ipynb`](examples/growing_sphere.ipynb).
+- **Prototype** is implemented in [`cfproto_mnist.ipynb`](examples/cfproto_mnist.ipynb). Our implementation is adopted from the package [alibi](https://github.com/SeldonIO/alibi/blob/e3d993369e38332022cf40f8bd4b37fb0352674f/doc/source/examples/cfproto_mnist.ipynb).
+- The **Binary Space Partition** technique which finds counterfactual paths for non-path-based explainers is also implemented in [`growing_sphere.ipynb`](examples/growing_sphere.ipynb).
+
 ## Hyper-parameters
 
 The hyper-parameters are defined in the [`params.yaml`](facelift/library/params.yaml) file.
@@ -89,10 +97,3 @@ knn:
 start_point_idx: 1
 target_class: 9
 ```
-
-### HELOC
-
-To use tabular dataset, we first need to do preprocessing:
-
-- one-hot encoding of categorical features; and
-- normalisation.
