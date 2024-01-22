@@ -1,6 +1,3 @@
-[![License](https://img.shields.io/github/license/xuanxuanxuan-git/facelift)](https://github.com/xuanxuanxuan-git/facelift/blob/main/LICENSE)
-[![arXiv](https://img.shields.io/badge/arXiv-2306.02786-red.svg)](https://arxiv.org/abs/2306.02786)
-
 # FACELift 
 
 This repository hosts `FACElift` – source code and useful resources for the following paper. 
@@ -13,15 +10,6 @@ This repository hosts `FACElift` – source code and useful resources for the fo
 > While both of these requirements ensure that the steps of the journey as well as its destination are admissible, current literature neglects the multiplicity of such counterfactual paths.
 > To address this shortcoming we introduce the novel concept of explanatory multiverse that encompasses all the possible counterfactual journeys and shows how to navigate, reason about and compare the geometry of these paths – their affinity, branching, divergence and possible future convergence – with two methods: vector spaces and graphs.
 > Implementing this (interactive) explanatory process grants explainees more agency by allowing them to select counterfactuals based on the properties of the journey leading to them in addition to their absolute differences.
-
-```bibtex
-@article{
-  title={Navigating Explanatory Multiverse Through Counterfactual Path Geometry},
-  author={Sokol, Kacper and Small, Edward and Xuan, Yueqing},
-  journal={arXiv preprint arXiv:2306.02786},
-  year={2023}
-}
-```
 
 ## Tabular Data Example
 
