@@ -11,7 +11,7 @@ This repository hosts `FACElift` – source code and useful resources for the fo
 > To address this shortcoming we introduce the novel concept of explanatory multiverse that encompasses all the possible counterfactual journeys and shows how to navigate, reason about and compare the geometry of these paths – their affinity, branching, divergence and possible future convergence – with two methods: vector spaces and graphs.
 > Implementing this (interactive) explanatory process grants explainees more agency by allowing them to select counterfactuals based on the properties of the journey leading to them in addition to their absolute differences.
 
-## Tabular Data Example
+## Synthetic Tabular Data Example
 
 The role of geometry in (counterfactual) explainability is captured by the following figure, which demonstrates the diverse characteristics of counterfactual paths for a two-dimensional toy data set with continuous numerical features.
 
@@ -54,7 +54,11 @@ The following figure demonstrates counterfactual pathfinding in the MNIST datase
 > Paths leading to alternative classification outcomes are also possible (shown in grey).
 > Path 1 is shorter than Path 2 at the expense of explainees' agency – which is reflected in its smaller branching factor – therefore switching to alternative paths leading to different classes is easier, i.e., less costly in terms of distance.
 
-## Baselines
+## German Credit Experiment
+
+Our proposed method `FACElift` is implemented in [`german_facelift`](examples/german_facelift.ipynb).
+
+## MNIST Experiment
 
 We use the following three baseline explainers to generate counterfactual explanations for MNIST dataset.
 - **FACE** is implemented in [`mnist_example.ipynb`](examples/mnist_example.ipynb).
@@ -69,10 +73,24 @@ The hyper-parameters are defined in the [`params.yaml`](facelift/library/params.
 
 ## Datasets
 
+### German Credit
+
+```
+prediction_threshold: 0.9
+penalty_term: 1
+
+directed: False 
+distance_function: l2
+method: knn
+knn:
+  n_neighbours: 3
+
+target_class: 1
+```
+
 ### MNIST
 
 ```
-distance_threshold: 6.1
 prediction_threshold: 0.6
 penalty_term: 1.1
 
@@ -82,6 +100,5 @@ method: knn
 knn:
   n_neighbours: 5
 
-start_point_idx: 1
 target_class: 9
 ```
