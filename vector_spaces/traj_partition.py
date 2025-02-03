@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from func.data_gen import surface_1
-from vector_spaces.func import sim_meas as sim
+from func import sim_meas as sim
 import matplotlib.patheffects as pe
 
 
